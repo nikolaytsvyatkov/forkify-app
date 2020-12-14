@@ -1,0 +1,28 @@
+{
+  "name": "forkify-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikolaytsvyatkov/forkify-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikolaytsvyatkov/forkify-app/issues"
+  },
+  "homepage": "https://github.com/nikolaytsvyatkov/forkify-app#readme",
+  "dependencies": {
+    "core-js": "^3.8.1",
+    "fractional": "^1.0.0",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  }
+}
