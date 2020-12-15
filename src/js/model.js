@@ -59,6 +59,25 @@ export function getResultsPage(page = state.search.page) {
 }
 
 
+export function updateServings(newServing) {
+      const {servings, ingredients} = state.recipe;
+      const newServings = [...ingredients];
+      if (newServing > servings) {
+        //increase
+        newServings.map(ing => ing.quantity += (ing.quantity / servings));
+
+      } else {
+        newServings.map(ing => ing.quantity -= (ing.quantity / servings));
+      }
+      
+      state.recipe.servings = newServing;
+      state.recipe.ingredients = newServings;
+
+      
+      // newServing.map(ing => ing.)
+}
+
+
 
 
 
