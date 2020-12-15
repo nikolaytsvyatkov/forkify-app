@@ -24,7 +24,7 @@ class PaginationView extends View {
             return `<button data-go-to=${currentPage - 1} class="btn--inline pagination__btn--prev">
             <span>Page ${currentPage - 1}</span>
             <svg class="search__icon">
-              <use href="${icons}#icon-arrow-right"></use>
+              <use href="${icons}#icon-arrow-left"></use>
             </svg>
           </button>`;
         }

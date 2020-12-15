@@ -1,5 +1,5 @@
 import { async } from 'regenerator-runtime';
-import {URL} from './config';
+import {URL, numPerPage} from './config';
 import { getJSON } from './helpers';
 
 
@@ -10,7 +10,7 @@ export const state = {
       query: '',
       results: [],
       page: 1,
-      numPerPage: 10
+      numPerPage: numPerPage
     },
     bookmarks: []
 
