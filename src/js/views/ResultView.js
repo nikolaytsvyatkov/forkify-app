@@ -41,14 +41,16 @@ class ResultView {
 
 
     render(data) {
-      
+      if (!data || (Array.isArray(data) && data.length === 0)) {
+        return this.renderError();
+      }
         this._data = data;
         const markup = this._generateMarkup();
         this._addToDOM(markup); 
     }
 
     _generateMarkup() {
-      return this._data.recipes.map(r => {
+      return this._data.map(r => {
         const {publisher, image_url: imageUrl, title, id} = r;
 
         return `<li class="preview">

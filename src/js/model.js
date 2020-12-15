@@ -6,7 +6,10 @@ import { getJSON } from './helpers';
 
 export const state = {
     recipe: {},
-    search: {},
+    search: {
+      query: '',
+      results: []
+    },
     bookmarks: []
 
 };
@@ -30,9 +33,16 @@ export  async function loadRecipe(id) {
     
 };
 
-export async function loadSearchResults() {
-  const data = await getJSON(`${URL}?search=pizza`);
-  state.search = {... data.data}
+export async function loadSearchResults(query) {
+
+  try {
+    const data = await getJSON(`${URL}?search=${query}`);
+    state.search.results = [... data.data.recipes];
+  }catch(err) {
+    console.error(err);
+    throw err;
+  }
+  
   
   
 }
