@@ -1,7 +1,8 @@
 import { async } from 'regenerator-runtime';
 
 import recipeView from './views/RecipeView'
-import {state, loadRecipe} from './model'
+import resultView from './views/ResultView'
+import {state, loadRecipe, loadSearchResults} from './model'
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -19,7 +20,7 @@ const controlRecipe = async function() {
   recipeView.render(state.recipe);
  }catch(err) {
     recipeView.renderError();
-    console.error(err)
+    console.error(err);
  }
       
  
@@ -35,6 +36,9 @@ const controlRecipe = async function() {
 
 async function init() {
   recipeView.addHandlerRender(controlRecipe);
+  await loadSearchResults();
+  resultView.render(state.search);
+  
 
 
 }

@@ -19,9 +19,9 @@ export const state = {
 export  async function loadRecipe(id) {
   try {
     
-    const data = await getJSON(`${URL}${id}`);
+    const data = await getJSON(`${URL}/${id}`);
     state.recipe = {...data.data.recipe};
-    console.log('data' + state.recipe);
+    
     
 
   } catch (err) {
@@ -29,6 +29,13 @@ export  async function loadRecipe(id) {
   }
     
 };
+
+export async function loadSearchResults() {
+  const data = await getJSON(`${URL}?search=pizza`);
+  state.search = {... data.data}
+  
+  
+}
 
 
 
