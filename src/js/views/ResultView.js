@@ -1,53 +1,8 @@
 import icons from './../../img/icons.svg';
+import View from './View';
 
-class ResultView {
-
-  
-
-    constructor(parentElement) {
-        this.parentElement = parentElement;
-        this.errorMessage = 'We could not find that recipe. Please try another one!';
-    }
-
-    _clearHTML() {
-        this.parentElement.innerHTML = '';
-    }
-
-    _generateSpinner () {
-       return  `
-        <div class="spinner">
-        <svg>
-          <use href="${icons}#icon-loader"></use>
-        </svg>
-        </div> `;
-    }
-
-    _generetaErrorMessage() {
-      return `<div class="error">
-      <div>
-        <svg>
-          <use href="${icons}#icon-alert-triangle"></use>
-        </svg>
-      </div>
-      <p>${this.errorMessage}</p>
-    </div>`
-    }
-
-    _addToDOM(element) {
-        this._clearHTML();
-        this.parentElement.insertAdjacentHTML('afterbegin',element);
-    }
-
-
-
-    render(data) {
-      if (!data || (Array.isArray(data) && data.length === 0)) {
-        return this.renderError();
-      }
-        this._data = data;
-        const markup = this._generateMarkup();
-        this._addToDOM(markup); 
-    }
+class ResultView extends View {
+  errorMessage = 'We could not find that recipe. Please try another one!';
 
     _generateMarkup() {
       return this._data.map(r => {
@@ -73,14 +28,7 @@ class ResultView {
       }).join('');
     }
 
-    renderSpinner() {
-        this._addToDOM(this._generateSpinner());
-      }
-  
-      renderError(){
-        this._addToDOM(this._generetaErrorMessage());
-      }
-
+    
 }
 
 

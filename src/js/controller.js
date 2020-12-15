@@ -29,10 +29,10 @@ const controlRecipe = async function() {
 const controlSearchResults = async function() {
 
   try {
-    resultView.renderSpinner();
-    const query = searchView.getInputValue();
-    if (!query) return;
     
+    const query = searchView.getInputValue();
+    if (!query) throw new Error();
+    resultView.renderSpinner();
     console.log(query);
     
 

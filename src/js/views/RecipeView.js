@@ -1,40 +1,8 @@
 import icons from './../../img/icons.svg';
+import View from './View';
 
-class RecipeView {
-    
-    constructor(parentElement) {
-        this.parentElement = parentElement;
-        this.errorMessage = 'We could not find that recipe. Please try another one!';
-    }
-
-    _clearHTML() {
-        this.parentElement.innerHTML = '';
-    }
-
-    _generateSpinner () {
-       return  `
-        <div class="spinner">
-        <svg>
-          <use href="${icons}#icon-loader"></use>
-        </svg>
-        </div> `;
-    }
-
-    _generetaErrorMessage() {
-      return `<div class="error">
-      <div>
-        <svg>
-          <use href="${icons}#icon-alert-triangle"></use>
-        </svg>
-      </div>
-      <p>${this.errorMessage}</p>
-    </div>`
-    }
-
-    _addToDOM(element) {
-        this._clearHTML();
-        this.parentElement.insertAdjacentHTML('afterbegin',element);
-    }
+class RecipeView extends View {
+  errorMessage = 'We could not find that recipe. Please try another one!';
 
     _generateMarkup() {
        const {publisher, ingredients, source_url: sourceUrl, image_url: imageURL, title, cooking_time: cookingTime, servings} = this._data;
@@ -142,26 +110,7 @@ class RecipeView {
    `;
    }
 
-    render(data) {
-      if (!data || (Array.isArray(data) && data.length === 0)) {
-        return this.renderError();
-      }
-        
-      
-      this._data = data;
-      
-
-      const markup = this._generateMarkup();
-      this._addToDOM(markup);
-    }
-
-    renderSpinner() {
-      this._addToDOM(this._generateSpinner());
-    }
-
-    renderError(){
-      this._addToDOM(this._generetaErrorMessage());
-    }
+   
 
     addHandlerRender(handler) {
       [`hashchange`, 'load'].forEach(event => window.addEventListener(event, handler));
