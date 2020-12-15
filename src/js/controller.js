@@ -3,7 +3,8 @@ import { async } from 'regenerator-runtime';
 import recipeView from './views/RecipeView'
 import resultView from './views/ResultView'
 import searchView from './views/SearchView'
-import {state, loadRecipe, loadSearchResults} from './model'
+import pagination from './views/PaginationView'
+import {state, loadRecipe, loadSearchResults, getResultsPage} from './model'
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -38,10 +39,19 @@ const controlSearchResults = async function() {
 
     
     await loadSearchResults(query);
-    resultView.render(state.search.results);
+    const resultsPerPage = getResultsPage(state.search.page);
+    pagination.render(state.search);
+    resultView.render(resultsPerPage);
   }catch(err) {
       resultView.renderError();
   }
+    
+}
+
+const controlPagination = function(pageToGo) {
+    resultView.render(getResultsPage(pageToGo));
+    pagination.render(state.search);
+
     
 }
 
@@ -50,6 +60,7 @@ const controlSearchResults = async function() {
 async function init() {
   recipeView.addHandlerRender(controlRecipe);
   searchView.addSearchHandler(controlSearchResults);
+  pagination.addClickHandler(controlPagination);
  
 }
 
