@@ -1,5 +1,6 @@
 import icons from './../../img/icons.svg';
 import View from './View';
+import {Fraction} from 'fractional';
 
 class RecipeView extends View {
   errorMessage = 'We could not find that recipe. Please try another one!';
@@ -48,7 +49,7 @@ class RecipeView extends View {
          <use href="${icons}#icon-user"></use>
        </svg>
      </div>
-     <button class="btn--round">
+     <button class="bookmarkButton btn--round">
        <svg class="">
          <use href="${icons}#icon-bookmark-fill"></use>
        </svg>
@@ -64,7 +65,7 @@ class RecipeView extends View {
          <svg class="recipe__icon">
            <use href="${icons}#icon-check"></use>
          </svg>
-         <div class="recipe__quantity">${ing.quantity === null ? '' : ing.quantity}</div>
+         <div class="recipe__quantity">${ing.quantity === null ? '' : new Fraction(ing.quantity).toString()}</div>
          <div class="recipe__description">
            <span class="recipe__unit">${ing.unit}</span>
            ${ing.description}
@@ -128,6 +129,17 @@ class RecipeView extends View {
         
 
       })
+    }
+
+    addHandlerUpdateBookmark(handler) {
+      this.parentElement.addEventListener('click', (event) => {
+        const updateBtn = event.target.closest('.bookmarkButton');
+        
+        handler(this._data);
+        
+      }) 
+
+      
     }
     
 }

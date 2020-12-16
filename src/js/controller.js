@@ -1,11 +1,12 @@
 import { async } from 'regenerator-runtime';
 
 import recipeView from './views/RecipeView'
-import resultView from './views/ResultView'
+import {resultView} from './views/ResultView'
 import searchView from './views/SearchView'
 import pagination from './views/PaginationView'
+import bookmarkView from './views/BookmarkView'
 import {state, loadRecipe, loadSearchResults, getResultsPage,
-updateServings} from './model'
+updateServings, updateBookmarks} from './model'
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -62,6 +63,14 @@ const controlUpdateServings = function(servings) {
     recipeView.update(state.recipe);
 }
 
+const controlUpdateBookmark = function(recipe) {
+  
+  updateBookmarks(recipe);
+  const stored = window.localStorage.getItem('bookmarks');
+  bookmarkView.render(JSON.parse(stored));
+}
+
+
 
 
 
@@ -70,6 +79,7 @@ async function init() {
   searchView.addSearchHandler(controlSearchResults);
   pagination.addClickHandler(controlPagination);
   recipeView.addHandlerUpdateServind(controlUpdateServings);
+  recipeView.addHandlerUpdateBookmark(controlUpdateBookmark);
  
 }
 

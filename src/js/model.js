@@ -12,7 +12,7 @@ export const state = {
       page: 1,
       numPerPage: numPerPage
     },
-    bookmarks: []
+    bookmarks: new Set()
 
 };
 
@@ -77,8 +77,22 @@ export function updateServings(newServing) {
       // newServing.map(ing => ing.)
 }
 
+export const updateBookmarks = function(recipe) {
+
+    
+    state.bookmarks.add(recipe);
+    window.localStorage.setItem('bookmarks',JSON.stringify(Array.from(state.bookmarks)));
+   
+}
 
 
+// const init = function () {
+//   const storage = window.localStorage.getItem('bookmarks');
+//   if (storage) state.bookmarks = new Set(JSON.parse(storage));
+
+//   console.log(state.bookmarks)
+// };
+// init();
 
 
 

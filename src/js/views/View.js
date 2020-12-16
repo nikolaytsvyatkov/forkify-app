@@ -6,7 +6,7 @@ export default class View {
         
     }
 
-    render(data) {
+    render(data, render = true) {
         if (!data || (Array.isArray(data) && data.length === 0)) {
           return this.renderError();
         }
@@ -16,6 +16,7 @@ export default class View {
         
   
         const markup = this._generateMarkup();
+        if (!render) return markup;
         this._addToDOM(markup);
       }
 
