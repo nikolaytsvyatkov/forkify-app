@@ -5,7 +5,7 @@ export class ResultView extends View {
   errorMessage = 'We could not find that recipe. Please try another one!';
 
     _generateMarkup() {
-     
+      
       return this._data.map(r => {
         const {publisher, image_url: imageUrl, title, id} = r;
 

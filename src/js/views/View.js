@@ -14,8 +14,9 @@ export default class View {
         
         this._data = data;
         
-  
+        
         const markup = this._generateMarkup();
+       
         if (!render) return markup;
         this._addToDOM(markup);
       }

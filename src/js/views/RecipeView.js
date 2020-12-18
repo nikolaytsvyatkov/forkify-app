@@ -6,7 +6,7 @@ class RecipeView extends View {
   errorMessage = 'We could not find that recipe. Please try another one!';
 
     _generateMarkup() {
-       const {publisher, ingredients, source_url: sourceUrl, image_url: imageURL, title, cooking_time: cookingTime, servings} = this._data;
+       const {publisher, ingredients, source_url: sourceUrl, image_url: imageURL, title, cooking_time: cookingTime, servings, bookmarked} = this._data;
       return `
    <figure class="recipe__fig">
      <img src="${imageURL}" alt="Tomato" class="recipe__img" />
@@ -51,7 +51,7 @@ class RecipeView extends View {
      </div>
      <button class="bookmarkButton btn--round">
        <svg class="">
-         <use href="${icons}#icon-bookmark-fill"></use>
+         <use href="${icons}#icon-bookmark${bookmarked ? '-fill':''}"></use>
        </svg>
      </button>
    </div>
@@ -134,7 +134,7 @@ class RecipeView extends View {
     addHandlerUpdateBookmark(handler) {
       this.parentElement.addEventListener('click', (event) => {
         const updateBtn = event.target.closest('.bookmarkButton');
-        
+        if (!updateBtn) return
         handler(this._data);
         
       }) 

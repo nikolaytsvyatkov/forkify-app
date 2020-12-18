@@ -1,12 +1,12 @@
 import { async } from 'regenerator-runtime';
-
-import recipeView from './views/RecipeView'
-import {resultView} from './views/ResultView'
-import searchView from './views/SearchView'
-import pagination from './views/PaginationView'
-import bookmarkView from './views/BookmarkView'
+;
+import recipeView from './views/RecipeView';
+import {resultView} from './views/ResultView';
+import bookmarkView from './views/BookmarkView';
+import searchView from './views/SearchView';
+import pagination from './views/PaginationView';
 import {state, loadRecipe, loadSearchResults, getResultsPage,
-updateServings, updateBookmarks} from './model'
+updateServings, addBookmark, removeBookmark} from './model';
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -18,9 +18,10 @@ const controlRecipe = async function() {
   if (!id) return;
 
   recipeView.renderSpinner();
-
-
+  
+  console.log(state.recipe)
   await loadRecipe(id);
+  
   recipeView.render(state.recipe);
  }catch(err) {
     recipeView.renderError();
@@ -59,28 +60,44 @@ const controlPagination = function(pageToGo) {
 
 const controlUpdateServings = function(servings) {
     updateServings(servings);
-    console.log(state.recipe)
+    
     recipeView.update(state.recipe);
 }
 
-const controlUpdateBookmark = function(recipe) {
+const controlUpdateBookmark = function() {
   
-  updateBookmarks(recipe);
-  const stored = window.localStorage.getItem('bookmarks');
-  bookmarkView.render(JSON.parse(stored));
+  
+  if (!state.recipe.bookmarked) {
+    addBookmark(state.recipe);
+  } else {
+    removeBookmark(state.recipe);
+  }
+
+  recipeView.update(state.recipe);
+  console.log(state.recipe)
+
+  bookmarkView.render(state.bookmarks);
+
 }
 
+const controlBookmarks = function () {
+  bookmarkView.render(state.bookmarks);
+};
 
 
 
 
-async function init() {
+
+const init = function() {
+  
   recipeView.addHandlerRender(controlRecipe);
   searchView.addSearchHandler(controlSearchResults);
   pagination.addClickHandler(controlPagination);
   recipeView.addHandlerUpdateServind(controlUpdateServings);
   recipeView.addHandlerUpdateBookmark(controlUpdateBookmark);
- 
+  bookmarkView.addHandlerListener(controlBookmarks);
+
+  
 }
 
 init();
