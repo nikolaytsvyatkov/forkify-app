@@ -1,13 +1,12 @@
-import { resultView } from "./ResultView";
-import View from "./View";
-
+import { resultView } from './ResultView';
+import View from './View';
 
 class BookmarkView extends View {
   errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it ;)';
-    _generateMarkup() {
-        return this._data
-          .map(bookmark => {
-              return `<li class="preview">
+  _generateMarkup() {
+    return this._data
+      .map(bookmark => {
+        return `<li class="preview">
               <a class="preview__link preview__link"  href="#${bookmark.id}">
                 <figure class="preview__fig">
                   <img src="${bookmark.image_url}" alt="Test" />
@@ -22,15 +21,14 @@ class BookmarkView extends View {
                   </div>
                 </div>
               </a>
-            </li>`
-          }).join('');
-         
-      }
+            </li>`;
+      })
+      .join('');
+  }
 
-      addHandlerListener(handler) {
-        window.addEventListener('load', handler)
-      }
+  addHandlerListener(handler) {
+    window.addEventListener('load', handler);
+  }
 }
-
 
 export default new BookmarkView(document.querySelector('.bookmarks'));

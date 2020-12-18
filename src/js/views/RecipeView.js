@@ -1,13 +1,22 @@
 import icons from './../../img/icons.svg';
 import View from './View';
-import {Fraction} from 'fractional';
+import { Fraction } from 'fractional';
 
 class RecipeView extends View {
   errorMessage = 'We could not find that recipe. Please try another one!';
 
-    _generateMarkup() {
-       const {publisher, ingredients, source_url: sourceUrl, image_url: imageURL, title, cooking_time: cookingTime, servings, bookmarked} = this._data;
-      return `
+  _generateMarkup() {
+    const {
+      publisher,
+      ingredients,
+      source_url: sourceUrl,
+      image_url: imageURL,
+      title,
+      cooking_time: cookingTime,
+      servings,
+      bookmarked,
+    } = this._data;
+    return `
    <figure class="recipe__fig">
      <img src="${imageURL}" alt="Tomato" class="recipe__img" />
      <h1 class="recipe__title">
@@ -31,12 +40,16 @@ class RecipeView extends View {
        <span class="recipe__info-text">servings</span>
 
        <div class="recipe__info-buttons">
-         <button data-update-to = ${servings - 1} class="btn--tiny btn--increase-servings">
+         <button data-update-to = ${
+           servings - 1
+         } class="btn--tiny btn--increase-servings">
            <svg>
              <use href="${icons}#icon-minus-circle"></use>
            </svg>
          </button>
-         <button data-update-to = ${servings + 1}  class="btn--tiny btn--increase-servings">
+         <button data-update-to = ${
+           servings + 1
+         }  class="btn--tiny btn--increase-servings">
            <svg>
              <use href="${icons}#icon-plus-circle"></use>
            </svg>
@@ -51,7 +64,7 @@ class RecipeView extends View {
      </div>
      <button class="bookmarkButton btn--round">
        <svg class="">
-         <use href="${icons}#icon-bookmark${bookmarked ? '-fill':''}"></use>
+         <use href="${icons}#icon-bookmark${bookmarked ? '-fill' : ''}"></use>
        </svg>
      </button>
    </div>
@@ -59,20 +72,22 @@ class RecipeView extends View {
    <div class="recipe__ingredients">
      <h2 class="heading--2">Recipe ingredients</h2>
      <ul class="recipe__ingredient-list">
-       ${ingredients.map(ing => {
-      
-         return `<li class="recipe__ingredient">
+       ${ingredients
+         .map(ing => {
+           return `<li class="recipe__ingredient">
          <svg class="recipe__icon">
            <use href="${icons}#icon-check"></use>
          </svg>
-         <div class="recipe__quantity">${ing.quantity === null ? '' : new Fraction(ing.quantity).toString()}</div>
+         <div class="recipe__quantity">${
+           ing.quantity === null ? '' : new Fraction(ing.quantity).toString()
+         }</div>
          <div class="recipe__description">
            <span class="recipe__unit">${ing.unit}</span>
            ${ing.description}
          </div>
        </li>`;
-         
-       ;}).join('')}
+         })
+         .join('')}
 
 
        
@@ -109,41 +124,33 @@ class RecipeView extends View {
          </a>
        </div>
    `;
-   }
+  }
 
-   
+  addHandlerRender(handler) {
+    [`hashchange`, 'load'].forEach(event =>
+      window.addEventListener(event, handler)
+    );
+  }
 
-    addHandlerRender(handler) {
-      [`hashchange`, 'load'].forEach(event => window.addEventListener(event, handler));
-    }
+  addHandlerUpdateServind(handler) {
+    this.parentElement.addEventListener('click', event => {
+      const btn = event.target.closest('.btn--increase-servings');
 
-    addHandlerUpdateServind(handler) {
-      this.parentElement.addEventListener('click', (event) => {
-        const btn = event.target.closest('.btn--increase-servings');
-        
-        if (!btn) return
+      if (!btn) return;
 
-        const pageToGo = +btn.dataset.updateTo;
-        if (pageToGo < 1) return;
-        handler(pageToGo);
-        
+      const pageToGo = +btn.dataset.updateTo;
+      if (pageToGo < 1) return;
+      handler(pageToGo);
+    });
+  }
 
-      })
-    }
-
-    addHandlerUpdateBookmark(handler) {
-      this.parentElement.addEventListener('click', (event) => {
-        const updateBtn = event.target.closest('.bookmarkButton');
-        if (!updateBtn) return
-        handler(this._data);
-        
-      }) 
-
-      
-    }
-    
+  addHandlerUpdateBookmark(handler) {
+    this.parentElement.addEventListener('click', event => {
+      const updateBtn = event.target.closest('.bookmarkButton');
+      if (!updateBtn) return;
+      handler(this._data);
+    });
+  }
 }
-
-
 
 export default new RecipeView(document.querySelector('.recipe'));

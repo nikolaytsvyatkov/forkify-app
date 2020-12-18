@@ -4,14 +4,17 @@ import View from './View';
 export class ResultView extends View {
   errorMessage = 'We could not find that recipe. Please try another one!';
 
-    _generateMarkup() {
-      const idUrl = window.location.hash.slice(1);
-      console.log(idUrl)
-      return this._data.map(r => {
-        const {publisher, image_url: imageUrl, title, id} = r;
-        
+  _generateMarkup() {
+    const idUrl = window.location.hash.slice(1);
+    console.log(idUrl);
+    return this._data
+      .map(r => {
+        const { publisher, image_url: imageUrl, title, id } = r;
+
         return `<li class="preview">
-        <a class="preview__link ${idUrl === id ? 'preview__link--active' : 'preview__link'}"  href="#${id}">
+        <a class="preview__link ${
+          idUrl === id ? 'preview__link--active' : 'preview__link'
+        }"  href="#${id}">
           <figure class="preview__fig">
             <img src="${imageUrl}" alt="Test" />
           </figure>
@@ -26,16 +29,9 @@ export class ResultView extends View {
           </div>
         </a>
       </li>`;
-     
-      }).join('');
-    }
-
-
-   
-
-    
+      })
+      .join('');
+  }
 }
-
-
 
 export const resultView = new ResultView(document.querySelector('.results'));
