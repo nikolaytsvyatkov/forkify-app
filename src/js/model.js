@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
-import { URL, numPerPage } from './config';
-import { getJSON } from './helpers';
+import { URL, numPerPage, KEY } from './config';
+import { AJAX } from './helpers';
 
 export const state = {
   recipe: {},
@@ -19,7 +19,7 @@ export const state = {
 
 export async function loadRecipe(id) {
   try {
-    const data = await getJSON(`${URL}/${id}`);
+    const data = await AJAX(`${URL}/${id}`);
 
     state.recipe = { ...data.data.recipe };
 
@@ -34,7 +34,7 @@ export async function loadRecipe(id) {
 export async function loadSearchResults(query) {
   state.search.query = query;
   try {
-    const data = await getJSON(`${URL}?search=${query}`);
+    const data = await AJAX(`${URL}?search=${query}&key=${KEY}`);
     state.search.results = [...data.data.recipes];
   } catch (err) {
     console.error(err);
@@ -82,6 +82,8 @@ export const removeBookmark = function (recipe) {
   state.bookmarks.splice(index, 1);
 
   if (state.recipe.id === recipe.id) state.recipe.bookmarked = false;
+
+  persistBookmark();
 };
 const persistBookmark = function () {
   window.localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
@@ -95,3 +97,84 @@ const init = function () {
   console.log(state.bookmarks);
 };
 init();
+
+export const uploadRecipe = async function (data) {
+  try {
+    const ingredients = Object.entries(data)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(([key, value]) => {
+        const [quantity, unit, description] = value.split(',');
+        return {
+          description: description,
+          quantity: quantity ? +quantity : null,
+          unit: unit,
+        };
+      });
+
+    const recipe = {
+      title: data.title,
+      source_url: data.sourceUrl,
+      image_url: data.image,
+      publisher: data.publisher,
+      cooking_time: +data.cookingTime,
+      servings: +data.servings,
+      ingredients,
+    };
+
+    const obj = await AJAX(`${URL}?key=${KEY}`, recipe);
+    // const {
+    //   publisher,
+    //   ingredients,
+    //   source_url: sourceUrl,
+    //   image_url: imageURL,
+    //   title,
+    //   cooking_time: cookingTime,
+    //   servings,
+    //   bookmarked,
+    // } = obj.recipe;
+
+    console.log(obj.data.recipe);
+
+    state.recipe = { ...obj.data.recipe };
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+
+  // export const uploadRecipe = async function (newRecipe) {
+  //   try {
+  //     const ingredients = Object.entries(newRecipe)
+  //       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+  //       .map(ing => {
+  //         const ingArr = ing[1].split(',').map(el => el.trim());
+  //         // const ingArr = ing[1].replaceAll(' ', '').split(',');
+  //         if (ingArr.length !== 3)
+  //           throw new Error(
+  //             'Wrong ingredient fromat! Please use the correct format :)'
+  //           );
+
+  //         const [quantity, unit, description] = ingArr;
+
+  //         return { quantity: quantity ? +quantity : null, unit, description };
+  //       });
+
+  //     const recipe = {
+  //       title: newRecipe.title,
+  //       source_url: newRecipe.sourceUrl,
+  //       image_url: newRecipe.image,
+  //       publisher: newRecipe.publisher,
+  //       cooking_time: +newRecipe.cookingTime,
+  //       servings: +newRecipe.servings,
+  //       ingredients,
+  //     };
+
+  //     const data = await sendJSON(`${API_URL}?key=${KEY}`, recipe);
+  //     state.recipe = createRecipeObject(data);
+  //     addBookmark(state.recipe);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // description: 'can refrigerated pizza crust dough';
+  // quantity: 1;
+  // unit: '';
+};

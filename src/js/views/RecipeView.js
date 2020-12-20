@@ -15,6 +15,7 @@ class RecipeView extends View {
       cooking_time: cookingTime,
       servings,
       bookmarked,
+      key,
     } = this._data;
     return `
    <figure class="recipe__fig">
@@ -57,11 +58,11 @@ class RecipeView extends View {
        </div>
      </div>
 
-     <div class="recipe__user-generated">
+      <div class="recipe__user-generated ${key ? '' : 'hidden'}">
        <svg>
          <use href="${icons}#icon-user"></use>
        </svg>
-     </div>
+     </div> 
      <button class="bookmarkButton btn--round">
        <svg class="">
          <use href="${icons}#icon-bookmark${bookmarked ? '-fill' : ''}"></use>

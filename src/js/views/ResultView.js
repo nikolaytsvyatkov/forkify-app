@@ -9,7 +9,7 @@ export class ResultView extends View {
     console.log(idUrl);
     return this._data
       .map(r => {
-        const { publisher, image_url: imageUrl, title, id } = r;
+        const { publisher, image_url: imageUrl, title, id, key } = r;
 
         return `<li class="preview">
         <a class="preview__link ${
@@ -21,7 +21,7 @@ export class ResultView extends View {
           <div class="preview__data">
             <h4 class="preview__title">${title}</h4>
             <p class="preview__publisher">${publisher}</p>
-            <div class="preview__user-generated">
+            <div class="preview__user-generated ${key ? '' : 'hidden'}">
               <svg>
                 <use href="${icons}#icon-user"></use>
               </svg>

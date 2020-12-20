@@ -4,15 +4,9 @@ import { resultView } from './views/ResultView';
 import bookmarkView from './views/BookmarkView';
 import searchView from './views/SearchView';
 import pagination from './views/PaginationView';
-import {
-  state,
-  loadRecipe,
-  loadSearchResults,
-  getResultsPage,
-  updateServings,
-  addBookmark,
-  removeBookmark,
-} from './model';
+import uploadRecipeView from './views/UploadRecipeView';
+
+import * as model from './model';
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -24,11 +18,11 @@ const controlRecipe = async function () {
     if (!id) return;
 
     recipeView.renderSpinner();
-    resultView.update(getResultsPage());
-    console.log(state.recipe);
-    await loadRecipe(id);
+    resultView.update(model.getResultsPage());
+    console.log(model.state.recipe);
+    await model.loadRecipe(id);
 
-    recipeView.render(state.recipe);
+    recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
     console.error(err);
@@ -42,9 +36,9 @@ const controlSearchResults = async function () {
     resultView.renderSpinner();
     console.log(query);
 
-    await loadSearchResults(query);
-    const resultsPerPage = getResultsPage(state.search.page);
-    pagination.render(state.search);
+    await model.loadSearchResults(query);
+    const resultsPerPage = model.getResultsPage(model.state.search.page);
+    pagination.render(model.state.search);
     resultView.render(resultsPerPage);
   } catch (err) {
     resultView.renderError();
@@ -52,33 +46,41 @@ const controlSearchResults = async function () {
 };
 
 const controlPagination = function (pageToGo) {
-  state.page = pageToGo;
+  model.state.page = pageToGo;
 
-  resultView.render(getResultsPage(pageToGo));
-  pagination.render(state.search);
+  resultView.render(model.getResultsPage(pageToGo));
+  pagination.render(model.state.search);
 };
 
 const controlUpdateServings = function (servings) {
-  updateServings(servings);
+  model.updateServings(servings);
 
-  recipeView.update(state.recipe);
+  recipeView.update(model.state.recipe);
 };
 
 const controlUpdateBookmark = function () {
-  if (!state.recipe.bookmarked) {
-    addBookmark(state.recipe);
+  if (!model.state.recipe.bookmarked) {
+    model.addBookmark(model.state.recipe);
   } else {
-    removeBookmark(state.recipe);
+    model.removeBookmark(model.state.recipe);
   }
 
-  recipeView.update(state.recipe);
-  console.log(state.recipe);
+  recipeView.update(model.state.recipe);
+  console.log(model.state.recipe);
 
-  bookmarkView.render(state.bookmarks);
+  bookmarkView.render(model.state.bookmarks);
 };
 
 const controlBookmarks = function () {
-  bookmarkView.render(state.bookmarks);
+  bookmarkView.render(model.state.bookmarks);
+};
+
+const controlUploadRecipe = async function (data) {
+  uploadRecipeView.renderSpinner();
+  await model.uploadRecipe(data);
+  uploadRecipeView.renderMessage();
+  recipeView.render(model.state.recipe);
+  bookmarkView.render(model.state.bookmarks);
 };
 
 const init = function () {
@@ -88,6 +90,7 @@ const init = function () {
   recipeView.addHandlerUpdateServind(controlUpdateServings);
   recipeView.addHandlerUpdateBookmark(controlUpdateBookmark);
   bookmarkView.addHandlerListener(controlBookmarks);
+  uploadRecipeView.uploadHandler(controlUploadRecipe);
 };
 
 init();

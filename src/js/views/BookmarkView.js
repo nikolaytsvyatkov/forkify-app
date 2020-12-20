@@ -1,4 +1,6 @@
 import { resultView } from './ResultView';
+import icons from './../../img/icons.svg';
+
 import View from './View';
 
 class BookmarkView extends View {
@@ -14,9 +16,11 @@ class BookmarkView extends View {
                 <div class="preview__data">
                   <h4 class="preview__title">${bookmark.title}</h4>
                   <p class="preview__publisher">${bookmark.publisher}</p>
-                  <div class="preview__user-generated">
+                  <div class="preview__user-generated ${
+                    bookmark.key ? '' : 'hidden'
+                  }">
                     <svg>
-                      <use href="${bookmark.icons}#icon-user"></use>
+                      <use href="${icons}#icon-user"></use>
                     </svg>
                   </div>
                 </div>

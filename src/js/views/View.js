@@ -1,3 +1,4 @@
+import { mark } from 'regenerator-runtime';
 import icons from './../../img/icons.svg';
 
 export default class View {
@@ -22,6 +23,10 @@ export default class View {
     this.parentElement.innerHTML = '';
   }
 
+  toggleClass(element, className) {
+    element.classList.toggle(className);
+  }
+
   _generateSpinner() {
     return `
          <div class="spinner">
@@ -42,6 +47,21 @@ export default class View {
       </div>`;
   }
 
+  _generateMessage() {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${this._message}</p>
+      </div>
+    `;
+
+    return markup;
+  }
+
   _addToDOM(element) {
     this._clearHTML();
     this.parentElement.insertAdjacentHTML('afterbegin', element);
@@ -53,6 +73,10 @@ export default class View {
 
   renderError() {
     this._addToDOM(this._generetaErrorMessage());
+  }
+
+  renderMessage() {
+    this._addToDOM(this._generateMessage());
   }
 
   update(data) {
